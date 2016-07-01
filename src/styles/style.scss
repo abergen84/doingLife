@@ -3,8 +3,14 @@
 	box-sizing: border-box;
 }
 
-h1 {
-	font-size: 300px;
-	text-align: center;
-	color: fuchsia;
+header {
+	input {
+		width: 200px;
+		margin: 0 auto;
+		display: block;
+	}
+	h1 {
+		font-size: 52px;
+		text-align: center;
+	}
 }

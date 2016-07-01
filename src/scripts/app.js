@@ -1,15 +1,26 @@
-const React = require('react'),
-	ReactDOM = require('react-dom')
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Backbone from 'backbone'
+import ToDoView from './ToDoView'
+
 
 const app = function() {
 
-	const Header = React.createClass({
-		render: () => {
-			return <h1>YOLO</h1>
-		}
-	})
+const ReminderModel = Backbone.Model.extend({
+	// defaults: {
+	// 	test: 'test'
+	// }
+})
 
-	ReactDOM.render(<Header/>,document.querySelector('.container'))
+const ReminderCollection = Backbone.Collection.extend({
+	model: ReminderModel
+})
+
+const reminderCollection = new ReminderCollection();
+
+ReactDOM.render(<ToDoView reminderColl={reminderCollection} />, document.querySelector('.container'))
+
 }
+	
 
 app()
