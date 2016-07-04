@@ -5,19 +5,23 @@ import Backbone from 'backbone'
 const ToDoView = React.createClass({
 	
 	getInitialState: function(){
+		// console.log(this)
 		return {
-			reminderColl: this.props.reminderColl
+			reminderColl: this.props.reminderColl,
+			currentView: 'allTasks'
 		}
 	},
 
 	componentWillMount: function(){
 		console.log('htineeeee')
-		console.log(this)
+		// console.log(this)
 		var self = this
 		this.props.reminderColl.on('update', function(){
 			self.setState({
-				reminderColl: self.props.reminderColl
+				reminderColl: self.props.reminderColl,
+				// currentView: 'allTasks'
 			})
+			console.log(self)
 		})
 	},
 
@@ -25,17 +29,34 @@ const ToDoView = React.createClass({
 		// console.log(reminder)
 		// console.log(this)
 		this.props.reminderColl.add({
-			reminder: reminder
+			reminder: reminder,
+			task: "notdone"
 		})
+	},
+
+	_handleComplete: function() {
+		// console.log('firing')
+		this.setState({
+			currentView: 'done'
+		})
+		console.log(this.state)
+	},
+
+	_handleIncomplete: function() {
+		// console.log('firing')
+		this.setState({
+			currentView: 'notdone'
+		})
+		console.log(this.state)
 	},
 
 	render: function(){
 		// console.log(this)
 		return (
 			<div id="appContainer">
-				<Header />
+				<Header completeState={this._handleComplete} incompleteState={this._handleIncomplete} />
 				<Input addReminder={this._addReminder} />
-				<ReminderContainer reminderColl={this.props.reminderColl} />
+				<ReminderContainer currentView={this.state.currentView} reminderColl={this.state.reminderColl} />
 			</div>
 			)
 	}
@@ -44,10 +65,15 @@ const ToDoView = React.createClass({
 
 
 const Header = React.createClass({
+
 	render: function(){
+		// console.log(this)
 		return (
 			<header id="appHeader">
 			<h1>remindMeAboutLife</h1>
+			<button>All Tasks</button>
+			<button onClick={this.props.completeState} >Completed</button>
+			<button onClick={this.props.incompleteState} >Still Gotta Do</button>
 			</header>
 			)
 	}
@@ -64,7 +90,7 @@ const Input = React.createClass({
 	},
 
 	render: function(){
-		// console.log(this)
+		console.log(this)
 		return (
 			<div id="inputbar">
 				<input type="text" placeholder="reminder?" onKeyDown={this._handleClick} />
@@ -84,12 +110,25 @@ const ReminderContainer = React.createClass({
 		return jsxArray
 	},
 
+	_filterStatus: function(array){
+		console.log('firing off filter method', array)
+		var filteredArray = array.filter(function(model){
+			console.log(model.attributes.task)
+			if(model.attributes.task === "done") {
+				// console.log("works")
+				return <ToDo models={model} />
+			}
+		})
+
+		return filteredArray
+	},
+
 	render: function(){
 		console.log(this)
 		return (
 		<div id="reminderContainer">
 			<ul>
-			{this._getJSXArray(this.props.reminderColl.models)}
+			{this.props.currentView === "done" ? this._filterStatus(this.props.reminderColl.models) : this._getJSXArray(this.props.reminderColl.models)}
 			</ul>
 		</div>
 		)
