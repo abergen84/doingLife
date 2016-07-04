@@ -4,13 +4,19 @@
 }
 
 header {
-	input {
-		width: 200px;
-		margin: 0 auto;
-		display: block;
-	}
 	h1 {
 		font-size: 52px;
 		text-align: center;
 	}
+}
+
+input {
+		width: 200px;
+		margin: 0 auto;
+		display: block;
+	}
+
+input[type="checkbox"] {
+	display: inline-block;
+	margin-left: 20px;
 }

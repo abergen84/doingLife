@@ -1,24 +1,49 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Backbone from 'backbone'
-import ToDoView from './ToDoView'
+import ToDoView from './ToDoView.js'
+// import DoneView from './ToDoView.js'
 
 
 const app = function() {
 
-const ReminderModel = Backbone.Model.extend({
+var ReminderModel = Backbone.Model.extend({
 	// defaults: {
-	// 	test: 'test'
+	// 	reminder: 'dummy data'
 	// }
 })
 
-const ReminderCollection = Backbone.Collection.extend({
+
+var ReminderCollection = Backbone.Collection.extend({
 	model: ReminderModel
 })
 
-const reminderCollection = new ReminderCollection();
 
-ReactDOM.render(<ToDoView reminderColl={reminderCollection} />, document.querySelector('.container'))
+// var Router = Backbone.Router.extend({
+// 	routes: {
+// 		"tasks/done": "showDoneTasks",
+// 		"tasks/undone": "showUndoneTasks",
+// 		"*all": "showHomepage"
+// 	},
+
+// 	initialize: function(){
+// 		Backbone.history.start()
+// 	},
+
+// 	showHomepage: function(){
+// 		location.hash = "#home"
+		ReactDOM.render(<ToDoView reminderColl={new ReminderCollection} />, document.querySelector('.container'))
+
+// 	},
+
+// 	showDoneTasks: function(){
+// 		ReactDOM.render(<DoneView reminderColl={new ReminderCollection} />, document.querySelector('.container'))
+// 	}
+// })
+
+// new Router();
+
+
 
 }
 	
