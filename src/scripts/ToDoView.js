@@ -34,27 +34,27 @@ const ToDoView = React.createClass({
 		})
 	},
 
-	_handleComplete: function() {
+	_handleTask: function(taskStatus) {
 		// console.log('firing')
 		this.setState({
-			currentView: 'done'
+			currentView: taskStatus
 		})
 		console.log(this.state)
 	},
 
-	_handleIncomplete: function() {
-		// console.log('firing')
-		this.setState({
-			currentView: 'notdone'
-		})
-		console.log(this.state)
-	},
+	// _handleIncomplete: function() {
+	// 	// console.log('firing')
+	// 	this.setState({
+	// 		currentView: 'notdone'
+	// 	})
+	// 	console.log(this.state)
+	// },
 
 	render: function(){
 		// console.log(this)
 		return (
 			<div id="appContainer">
-				<Header completeState={this._handleComplete} incompleteState={this._handleIncomplete} />
+				<Header taskState={this._handleTask} incompleteState={this._handleIncomplete} />
 				<Input addReminder={this._addReminder} />
 				<ReminderContainer currentView={this.state.currentView} reminderColl={this.state.reminderColl} />
 			</div>
@@ -72,8 +72,8 @@ const Header = React.createClass({
 			<header id="appHeader">
 			<h1>remindMeAboutLife</h1>
 			<button>All Tasks</button>
-			<button onClick={this.props.completeState} >Completed</button>
-			<button onClick={this.props.incompleteState} >Still Gotta Do</button>
+			<button value="done" onClick={(e)=>this.props.taskState(e.target.value)} >Completed</button>
+			<button value="notdone" onClick={(e)=>this.props.taskState(e.target.value)} >Still Gotta Do</button>
 			</header>
 			)
 	}
@@ -116,10 +116,10 @@ const ReminderContainer = React.createClass({
 			console.log(model.attributes.task)
 			if(model.attributes.task === "done") {
 				// console.log("works")
-				return <ToDo models={model} />
+				return true
 			}
 		})
-
+		console.log(filteredArray)
 		return filteredArray
 	},
 
@@ -128,7 +128,7 @@ const ReminderContainer = React.createClass({
 		return (
 		<div id="reminderContainer">
 			<ul>
-			{this.props.currentView === "done" ? this._filterStatus(this.props.reminderColl.models) : this._getJSXArray(this.props.reminderColl.models)}
+			{this.props.currentView === "done" ? this._getJSXArray(this._filterStatus(this.props.reminderColl.models)) : this._getJSXArray(this.props.reminderColl.models)}
 			</ul>
 		</div>
 		)
