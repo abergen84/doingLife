@@ -21,7 +21,7 @@ const ToDoView = React.createClass({
 				reminderColl: self.props.reminderColl,
 				// currentView: 'allTasks'
 			})
-			console.log(self)
+			// console.log(self)
 		})
 	},
 
@@ -39,7 +39,7 @@ const ToDoView = React.createClass({
 		this.setState({
 			currentView: taskStatus
 		})
-		console.log(this.state)
+		// console.log(this.state)
 	},
 
 	// _handleIncomplete: function() {
@@ -71,7 +71,7 @@ const Header = React.createClass({
 		return (
 			<header id="appHeader">
 			<h1>remindMeAboutLife</h1>
-			<button>All Tasks</button>
+			<button value="allTasks" onClick={(e)=>this.props.taskState(e.target.value)} >All Tasks</button>
 			<button value="done" onClick={(e)=>this.props.taskState(e.target.value)} >Completed</button>
 			<button value="notdone" onClick={(e)=>this.props.taskState(e.target.value)} >Still Gotta Do</button>
 			</header>
@@ -90,7 +90,7 @@ const Input = React.createClass({
 	},
 
 	render: function(){
-		console.log(this)
+		// console.log(this)
 		return (
 			<div id="inputbar">
 				<input type="text" placeholder="reminder?" onKeyDown={this._handleClick} />
@@ -110,7 +110,7 @@ const ReminderContainer = React.createClass({
 		return jsxArray
 	},
 
-	_filterStatus: function(array){
+	_filterStatusComplete: function(array){
 		console.log('firing off filter method', array)
 		var filteredArray = array.filter(function(model){
 			console.log(model.attributes.task)
@@ -119,16 +119,34 @@ const ReminderContainer = React.createClass({
 				return true
 			}
 		})
-		console.log(filteredArray)
+		// console.log(filteredArray)
 		return filteredArray
 	},
 
+	_filterStatusIncomplete: function(array){
+		var filteredIncArray = array.filter(function(model){
+			if(model.attributes.task === "notdone"){
+				return true
+			}
+		})
+		return filteredIncArray
+	},
+
 	render: function(){
-		console.log(this)
+		// console.log(this)
+		var handler
+		if(this.props.currentView === 'done'){
+			handler = this._getJSXArray(this._filterStatusComplete(this.props.reminderColl.models))
+		} else if(this.props.currentView === 'notdone') {
+			handler = this._getJSXArray(this._filterStatusIncomplete(this.props.reminderColl.models))
+		} else {
+			handler = this._getJSXArray(this.props.reminderColl.models)
+		}
 		return (
 		<div id="reminderContainer">
 			<ul>
-			{this.props.currentView === "done" ? this._getJSXArray(this._filterStatus(this.props.reminderColl.models)) : this._getJSXArray(this.props.reminderColl.models)}
+			{/*this.props.currentView === "done" ? this._getJSXArray(this._filterStatus(this.props.reminderColl.models)) : this._getJSXArray(this.props.reminderColl.models)*/}
+			{handler}
 			</ul>
 		</div>
 		)
@@ -152,7 +170,7 @@ const ToDo = React.createClass({
 				task: "notdone"
 			})
 		}
-		console.log(this.props.models.attributes)
+		// console.log(this.props.models.attributes)
 
 	},
 
